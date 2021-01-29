@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>test.qml</file>
+        <file>../../Downloads/map+marker+icon-1320166582858325800_64.png</file>
+    </qresource>
+</RCC>
