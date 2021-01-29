@@ -55,6 +55,7 @@ public:
                                    double lon_2);
   void SetSingleScenario(bool status);
   void SetDrawScenario(bool status);
+  void AddLatLonLabel(int markerCount, double lat, double lon);
 signals:
   void pathChanged();
   void comboBoxSelectionChanged();
@@ -62,6 +63,7 @@ signals:
 private:
   bool m_singleScenario = true;
   bool m_drawScenario = false;
+  QVector<QPair<double, double>> m_LatLonVector;
   QVector<gpxCoordinate> m_coordinates;
   int m_markerCount = 0;
 };

@@ -16,6 +16,9 @@ MarkerModel::MarkerModel(QObject *parent) : QAbstractListModel(parent) {
 
 void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
                             QDateTime dateTime) {
+  QPair<double, double> latLonpair;
+  latLonpair.first = coordinate.latitude();
+  latLonpair.second = coordinate.longitude();
   gpxCoordinate item;
   item.latlon = coordinate;
   item.ele = elevation;
@@ -23,11 +26,15 @@ void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
   m_coordinates.append(item);
   endInsertRows();
-  std::cout << item.latlon.toString().toStdString() << std::endl;
-  std::cout << "COORDINATES : " << coordinate.toString().toStdString() << "\n"
-            << "ELEVATION : " << QString::number(elevation).toStdString()
-            << "\n"
-            << "DATE TIME : " << dateTime.toString().toStdString() << std::endl;
+  std::cout << "LAT: " << coordinate.latitude()
+            << " LON: " << coordinate.longitude() << std::endl;
+  m_LatLonVector.append(latLonpair);
+  //  std::cout << "COORDINATES : " << coordinate.toString().toStdString() <<
+  //  "\n"
+  //            << "ELEVATION : " << QString::number(elevation).toStdString()
+  //            << "\n"
+  //            << "DATE TIME : " << dateTime.toString().toStdString() <<
+  //            std::endl;
   // TODO: from here write a function to compute the distance between two points
   // TODO: think how you can use that in conjunction with the section function
   // TODO: how do you add text to the map ?

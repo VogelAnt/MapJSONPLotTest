@@ -82,9 +82,9 @@ Item{
                         if(markerModel.getMarkerCount() < 1){
                             addMarker(coord)
                             markerModel.increaseMarkerCount()
+                            markerModel.addMarker(coord)
                             changeBorderColor()
                             console.log("Added marker at "+coord)
-                            console.log()
                         }
                     }
                     else if(markerModel.getDrawScenarioStatus()){
@@ -92,11 +92,15 @@ Item{
                         addMarker(coord)
                         changeBorderColor()
                         markerModel.increaseMarkerCount()
+                        markerModel.addMarker(coord)
+                        console.log("Added marker at "+coord)
                     }
                     else{
                         addMarker(coord)
                         changeBorderColor()
                         markerModel.increaseMarkerCount()
+                        markerModel.addMarker(coord)
+                        console.log("Added marker at "+coord)
                     }
                 }
             }
