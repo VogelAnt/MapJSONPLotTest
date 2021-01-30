@@ -1,34 +1,49 @@
-#include "testwidget.h"
+#include "mainwidget.h"
 
-TestWidget::TestWidget() {
+MainWidget::MainWidget() {
   SetupScenarioMap();
   SetupGeneralLayout();
   connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
-          &TestWidget::on_ScenarioChanged);
+          &MainWidget::on_ScenarioChanged);
   connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
-          &TestWidget::on_textSwitched);
+          &MainWidget::on_textSwitched);
+  connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
+          &MainWidget::on_scenarioTypechanged);
+  connect(markerModel, &MarkerModel::AddLatLonPairToUI, this,
+          &MainWidget::on_AddLatLonPairToUI);
+  SetupHLayout(m_addMarkerlayout, Qt::AlignLeft);
+  SetupVLayout(m_coordinateLayout, Qt::AlignTop);
 }
 
-void TestWidget::SetupGeneralLayout() {
+void MainWidget::on_AddLatLonPairToUI(double lat, double lon) {
+  CoordinateWidget *coordinateWidget =
+      new CoordinateWidget(this, m_markerIndex, lat, lon);
+  m_coordinateLayout->addWidget(coordinateWidget);
+  ++m_markerIndex;
+}
+
+void MainWidget::SetupGeneralLayout() {
   m_hLayout = new QHBoxLayout(this);
-  m_w1 = new QWidget(this);
+  //  m_w1 = new QWidget(this);
   m_w2 = new QWidget(this);
-  m_w1->setStyleSheet("background-color : red");
+  //  m_w1->setStyleSheet("background-color : red");
   m_w2->setStyleSheet("background-color : blue");
-  m_hLayout->addWidget(m_w1, 1);
+  //  m_hLayout->addWidget(m_w1, 1);
+  SetupCoordinateLayout();
   SetupQuickLayout();
+  m_hLayout->addLayout(m_coordinateLayout, 1);
   m_hLayout->addLayout(m_vLayout, 1);
   m_hLayout->addWidget(m_w2, 1);
 }
 
-void TestWidget::SetupScenarioMap() {
+void MainWidget::SetupScenarioMap() {
   m_scenarioMap["Single Static Scenario"] = m_singleScenarioselected;
   m_scenarioMap["Multi Static Scenario"] = m_multiScenarioselected;
   m_scenarioMap["Draw Scenario"] = m_drawScenarioselected;
   m_scenarioMap["Custom Dynamic Scenario"] = m_customScenarioselected;
 }
 
-void TestWidget::SetupQuickLayout() {
+void MainWidget::SetupQuickLayout() {
   m_vLayout = new QVBoxLayout();
   m_scenarioCombobox = new QComboBox(this);
   m_scenarioSelectionlist << "Single Static Scenario"
@@ -45,21 +60,7 @@ void TestWidget::SetupQuickLayout() {
   m_vLayout->addWidget(qWidget, 1);
 }
 
-void TestWidget::on_AddLatLonPair(double lat, double lon) {
-  QHBoxLayout *latlonLayout = new QHBoxLayout();
-  QLabel *latLabel = new QLabel("Latitude: ", this);
-  QLabel *lonLabel = new QLabel("Longitude: ", this);
-  QLineEdit *latEdit = new QLineEdit(QString::number(lat), this);
-  QLineEdit *lonEdit = new QLineEdit(QString::number(lon), this);
-
-  latlonLayout->addWidget(latLabel, 1);
-  latlonLayout->addWidget(latEdit, 1);
-  latlonLayout->addWidget(lonLabel, 1);
-  latlonLayout->addWidget(lonEdit, 1);
-  m_vLayout->addLayout(latlonLayout);
-}
-
-void TestWidget::on_textSwitched() {
+void MainWidget::on_textSwitched() {
   emit markerModel->comboBoxSelectionChanged();
   QString dropBoxtext = m_scenarioCombobox->currentText();
   if (dropBoxtext == "Single Static Scenario") {
@@ -77,7 +78,24 @@ void TestWidget::on_textSwitched() {
   std::cout << "Emitted the marker model selection changed " << std::endl;
 }
 
-void TestWidget::on_ScenarioChanged() {
+void MainWidget::SetupCoordinateLayout() {
+  m_coordinateLayout = new QVBoxLayout();
+  m_addMarkerlayout = new QHBoxLayout();
+  m_latLabel = new QLabel("Lat ", this);
+  m_latEdit = new QLineEdit(this);
+  m_lonLabel = new QLabel("Lon", this);
+  m_lonEdit = new QLineEdit(this);
+  m_addCoordinatebutton = new QPushButton("+", this);
+  m_addMarkerlayout->addWidget(m_latLabel);
+  m_addMarkerlayout->addWidget(m_latEdit);
+  m_addMarkerlayout->addWidget(m_lonLabel);
+  m_addMarkerlayout->addWidget(m_lonEdit);
+  m_addMarkerlayout->addWidget(m_addCoordinatebutton);
+  // TODO: fix the proportions
+  m_coordinateLayout->addLayout(m_addMarkerlayout);
+}
+
+void MainWidget::on_ScenarioChanged() {
   QString currentScenarioselection = m_scenarioCombobox->currentText();
   for (auto mapKey : m_scenarioMap.keys()) {
     m_scenarioMap[mapKey] = false;
@@ -99,11 +117,38 @@ void TestWidget::on_ScenarioChanged() {
   //                               GetDrawScenarioStatus());
 }
 
-TestWidget::~TestWidget() {
+MainWidget::~MainWidget() {
   // for each Label and LineEdit
   delete m_hLayout;
 }
 
-void TestWidget::on_MapClicked() {
+void MainWidget::on_MapClicked() {
   std::cout << "CLICKED ON MAP " << std::endl;
+}
+
+void MainWidget::SetupVLayout(QVBoxLayout *vlayout, Qt::Alignment alignment) {
+  vlayout->setSpacing(0);
+  vlayout->setMargin(0);
+  vlayout->setAlignment(alignment);
+  vlayout->setContentsMargins(0, 0, 0, 0);
+}
+
+void MainWidget::SetupHLayout(QHBoxLayout *hlayout, Qt::Alignment alignment) {
+  hlayout->setSpacing(0);
+  hlayout->setMargin(0);
+  hlayout->setAlignment(alignment);
+  hlayout->setContentsMargins(0, 0, 0, 0);
+}
+
+void MainWidget::on_scenarioTypechanged() {
+  m_markerIndex = 1;
+  clearCoordinatelayout();
+}
+
+void MainWidget::clearCoordinatelayout() {
+  QList<CoordinateWidget *> CoordinateWidgetList =
+      this->findChildren<CoordinateWidget *>();
+  foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
+    delete coordinateWidget;
+  }
 }

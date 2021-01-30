@@ -1,6 +1,8 @@
 #ifndef TESTWIDGET_H
 #define TESTWIDGET_H
+
 #include "mapmarker.h"
+#include "coordinatewidget.h"
 
 #include <iostream>
 #include <QObject>
@@ -12,13 +14,14 @@
 #include <QtQuickWidgets/QQuickWidget>
 #include <QtQuick>
 #include <QComboBox>
+#include <QPushButton>
 
-class TestWidget : public QWidget {
+class MainWidget : public QWidget {
   Q_PROPERTY(bool SingleStaticScenario READ GetSingleScenarioStatus NOTIFY
                  SendSingleAndDrawStatus)
 public:
-  TestWidget();
-  ~TestWidget();
+  MainWidget();
+  ~MainWidget();
   Q_INVOKABLE bool GetSingleScenarioStatus() {
     return m_scenarioMap["Single Static Scenario"];
   }
@@ -31,19 +34,25 @@ public:
   Q_INVOKABLE bool GetCustomScenarioStatus() {
     return m_scenarioMap["Custom Dynamic Scenario"];
   }
-  QObject *m_item = nullptr;
-signals:
-  // TODO: unused delete
-  void SendSingleAndDrawStatus(bool singleScenariostatus,
-                               bool drawScenariostatus);
 
 public slots:
   void on_MapClicked();
+  void on_AddLatLonPairToUI(double lat, double lon);
+  void on_scenarioTypechanged();
 
 private:
+  void SetupVLayout(QVBoxLayout *vlayout, Qt::Alignment alignment);
+  void SetupHLayout(QHBoxLayout *hlayout, Qt::Alignment alignment);
+  void SetupCoordinateLayout();
   void SetupGeneralLayout();
   void SetupQuickLayout();
   void SetupScenarioMap();
+  void AddToCoordinateLayout();
+  void clearCoordinatelayout();
+  void SetupHorizontalLayout();
+  void SetupVerticalLayout();
+
+  // Map Widget layout
   QHBoxLayout *m_hLayout = nullptr;
   QVBoxLayout *m_vLayout = nullptr;
   QComboBox *m_scenarioCombobox = nullptr;
@@ -56,9 +65,14 @@ private:
   bool m_drawScenarioselected;
   bool m_customScenarioselected;
 
+  // coordinate layout
   QHBoxLayout *m_addMarkerlayout = nullptr;
-  QVBoxLayout *markerCoordlayout = nullptr;
-
+  QVBoxLayout *m_coordinateLayout = nullptr;
+  QLabel *m_latLabel = nullptr;
+  QLineEdit *m_latEdit = nullptr;
+  QLabel *m_lonLabel = nullptr;
+  QLineEdit *m_lonEdit = nullptr;
+  QPushButton *m_addCoordinatebutton = nullptr;
   QMap<QString, bool> m_scenarioMap;
   MarkerModel *markerModel = nullptr;
   int m_markerIndex = 1;

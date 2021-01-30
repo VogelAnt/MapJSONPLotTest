@@ -59,6 +59,7 @@ public:
 signals:
   void pathChanged();
   void comboBoxSelectionChanged();
+  void AddLatLonPairToUI(double lat, double lon);
 
 private:
   bool m_singleScenario = true;

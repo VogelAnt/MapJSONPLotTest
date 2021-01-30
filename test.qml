@@ -117,6 +117,7 @@ Item{
 
             onPositionChanged: {
                 if (currentIndex != -1){
+                    console.log("NOW IN POSITION CHANGED")
                     var point = Qt.point(mouse.x, mouse.y)
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
@@ -126,6 +127,7 @@ Item{
 
             onReleased: {
                 if (mouse.button == Qt.LeftButton && currentIndex != -1){
+                    console.log("NOW IN RELEASED MOUSE")
                     var point = Qt.point(mouse.x, mouse.y)
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
@@ -137,6 +139,7 @@ Item{
     }
 
     function moveMarker(index, coordinate){
+        console.log("MOVING MARKER")
         polygonmodel.set(index, {"coords": coordinate})
         // This part adapts the polygon path when the marker has been moved
         var path = polygon.path;

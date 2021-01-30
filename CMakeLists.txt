@@ -37,8 +37,10 @@ if(ANDROID)
 else()
   add_executable(MapJSONPlotTest
     main.cpp
-    testwidget.h
-    testwidget.cpp
+    mainwidget.h
+    mainwidget.cpp
+    coordinatewidget.h
+    coordinatewidget.cpp
     mapmarker.h
     mapmarker.cpp
     Resources.qrc
