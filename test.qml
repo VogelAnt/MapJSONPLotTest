@@ -64,6 +64,7 @@ Item{
         }
 
         MapPolygon{
+            // This is the path
             id: polygon
             opacity: 0.6
             border.color: "transparent"
@@ -85,6 +86,8 @@ Item{
                             markerModel.addMarker(coord)
                             changeBorderColor()
                             console.log("Added marker at "+coord)
+                            console.log("CURRENT INDEX "+currentIndex)
+
                         }
                     }
                     else if(markerModel.getDrawScenarioStatus()){
@@ -93,6 +96,7 @@ Item{
                         changeBorderColor()
                         markerModel.increaseMarkerCount()
                         markerModel.addMarker(coord)
+                        console.log("CURRENT INDEX "+currentIndex)
                         console.log("Added marker at "+coord)
                     }
                     else{
@@ -100,6 +104,7 @@ Item{
                         changeBorderColor()
                         markerModel.increaseMarkerCount()
                         markerModel.addMarker(coord)
+                        console.log("CURRENT INDEX "+currentIndex)
                         console.log("Added marker at "+coord)
                     }
                 }
@@ -110,8 +115,10 @@ Item{
                     if(markerCount >= 0){
                         var point = Qt.point(mouse.x, mouse.y)
                         var coord = map.toCoordinate(point);
-                        polygonmodel.remove(0, markerCount)
+//                        polygonmodel.remove(0, markerCount)
                         markerCount = markerCount -1
+                        console.log("CURRENT INDEX "+currentIndex)
+                        polygonmodel.remove(currentIndex)
                     }
                 }
 
@@ -122,8 +129,8 @@ Item{
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
                         moveMarker(currentIndex, coord)
-                        console.log(markerCount)
-                        markerModel.changeMarkerPosition(markerCount, coord)
+                        console.log("CURRENT INDEX "+currentIndex)
+                        markerModel.changeMarkerPosition(currentIndex+1, coord)
                 }
             }
 
@@ -134,8 +141,8 @@ Item{
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
                         moveMarker(currentIndex, coord)
-                        markerModel.changeMarkerPosition(markerCount, coord)
-
+                        markerModel.changeMarkerPosition(currentIndex+1, coord)
+                        console.log("CURRENT INDEX "+currentIndex)
                     currentIndex = -1;
                 }
             }
@@ -143,17 +150,17 @@ Item{
     }
 
     function moveMarker(index, coordinate){
-        console.log("MOVING MARKER")
         polygonmodel.set(index, {"coords": coordinate})
         // This part adapts the polygon path when the marker has been moved
         var path = polygon.path;
         path[index] = coordinate
         polygon.path = path
+        console.log("MOVING MARKER CURRENT INDEX "+currentIndex)
+
 //        polygon.removeCoordinate(polygon.path)
     }
 
     function clearPath(){
-
     }
 
     function removeMarker(){
@@ -165,6 +172,8 @@ Item{
         polygon.addCoordinate(coordinate)
         console.log(markerCount)
         markerCount = markerCount+1
+        console.log("ADDING MARKER CURRENT INDEX "+currentIndex)
+
     }
 
     function changeBorderColor(){

@@ -26,6 +26,7 @@ private:
   QLabel *m_coordinateLabel = nullptr;
   double m_lat;
   double m_lon;
+  bool m_isDragged = false;
 };
 
 #endif // COORDINATEWIDGET_H
