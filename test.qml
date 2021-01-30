@@ -122,6 +122,8 @@ Item{
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
                         moveMarker(currentIndex, coord)
+                        console.log(markerCount)
+                        markerModel.changeMarkerPosition(markerCount, coord)
                 }
             }
 
@@ -132,6 +134,8 @@ Item{
                     var coord = map.toCoordinate(point);
                     if(coord.isValid)
                         moveMarker(currentIndex, coord)
+                        markerModel.changeMarkerPosition(markerCount, coord)
+
                     currentIndex = -1;
                 }
             }

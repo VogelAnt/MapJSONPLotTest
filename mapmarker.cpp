@@ -1,5 +1,4 @@
 #include "mapmarker.h"
-#include <iostream>
 
 MarkerModel::MarkerModel(QObject *parent) : QAbstractListModel(parent) {
   connect(this, &QAbstractListModel::rowsInserted, this,
@@ -42,6 +41,13 @@ void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
   // TODO: in the beginning: there should be an option to start from a fixed
   // point and go from there
   // TODO: or do the setting of way points free flow
+}
+
+void MarkerModel::changeMarkerPosition(int markerindex,
+                                       const QGeoCoordinate &coordinate,
+                                       float elevation, QDateTime dateTime) {
+  emit ChangeCoordinateWidget(markerindex, coordinate.latitude(),
+                              coordinate.longitude());
 }
 
 int MarkerModel::rowCount(const QModelIndex &parent) const {

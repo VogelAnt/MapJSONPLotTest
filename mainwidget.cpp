@@ -11,6 +11,8 @@ MainWidget::MainWidget() {
           &MainWidget::on_scenarioTypechanged);
   connect(markerModel, &MarkerModel::AddLatLonPairToUI, this,
           &MainWidget::on_AddLatLonPairToUI);
+  connect(markerModel, &MarkerModel::ChangeCoordinateWidget, this,
+          &MainWidget::on_ChangeCoordinateWidget);
   SetupHLayout(m_addMarkerlayout, Qt::AlignLeft);
   SetupVLayout(m_coordinateLayout, Qt::AlignTop);
 }
@@ -150,5 +152,16 @@ void MainWidget::clearCoordinatelayout() {
       this->findChildren<CoordinateWidget *>();
   foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
     delete coordinateWidget;
+  }
+}
+
+void MainWidget::on_ChangeCoordinateWidget(int idx, double lat, double lon) {
+  QList<CoordinateWidget *> CoordinateWidgetList =
+      this->findChildren<CoordinateWidget *>();
+  foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
+    if (coordinateWidget->GetCoordinateIndex() == idx) {
+      coordinateWidget->SetLat(lat);
+      coordinateWidget->SetLon(lon);
+    }
   }
 }

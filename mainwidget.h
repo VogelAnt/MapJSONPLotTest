@@ -39,6 +39,7 @@ public slots:
   void on_MapClicked();
   void on_AddLatLonPairToUI(double lat, double lon);
   void on_scenarioTypechanged();
+  void on_ChangeCoordinateWidget(int idx, double lat, double lon);
 
 private:
   void SetupVLayout(QVBoxLayout *vlayout, Qt::Alignment alignment);

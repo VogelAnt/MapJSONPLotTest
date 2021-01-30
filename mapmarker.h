@@ -40,6 +40,10 @@ public:
     m_markerCount = 0;
     return m_markerCount;
   }
+  Q_INVOKABLE void
+  changeMarkerPosition(int index, const QGeoCoordinate &coordinate,
+                       float elevation = 0,
+                       QDateTime dateTime = QDateTime::currentDateTime());
   //  void addMarker(const QGeoCoordinate &coordinate);
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   bool removeRows(int row, int count,
@@ -60,6 +64,7 @@ signals:
   void pathChanged();
   void comboBoxSelectionChanged();
   void AddLatLonPairToUI(double lat, double lon);
+  void ChangeCoordinateWidget(int idx, double lat, double lon);
 
 private:
   bool m_singleScenario = true;
