@@ -45,6 +45,7 @@ public:
                        float elevation = 0,
                        QDateTime dateTime = QDateTime::currentDateTime());
   //  void addMarker(const QGeoCoordinate &coordinate);
+  Q_INVOKABLE void removeFirstMarker();
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   bool removeRows(int row, int count,
                   const QModelIndex &parent = QModelIndex()) override;
@@ -65,6 +66,7 @@ signals:
   void comboBoxSelectionChanged();
   void AddLatLonPairToUI(double lat, double lon);
   void ChangeCoordinateWidget(int idx, double lat, double lon);
+  void RMMarkerOne();
 
 private:
   bool m_singleScenario = true;

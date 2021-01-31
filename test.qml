@@ -87,7 +87,6 @@ Item{
                             changeBorderColor()
                             console.log("Added marker at "+coord)
                             console.log("CURRENT INDEX "+currentIndex)
-
                         }
                     }
                     else if(markerModel.getDrawScenarioStatus()){
@@ -109,16 +108,16 @@ Item{
                     }
                 }
             }
-
             onClicked:
                 if(mouse.button == Qt.RightButton){
                     if(markerCount >= 0){
                         var point = Qt.point(mouse.x, mouse.y)
                         var coord = map.toCoordinate(point);
-//                        polygonmodel.remove(0, markerCount)
+                        polygonmodel.remove(0, currentIndex+2)
                         markerCount = markerCount -1
                         console.log("CURRENT INDEX "+currentIndex)
-                        polygonmodel.remove(currentIndex)
+                        markerModel.removeFirstMarker()
+//                        polygonmodel.remove(currentIndex)
                     }
                 }
 

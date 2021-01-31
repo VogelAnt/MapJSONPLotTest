@@ -15,6 +15,10 @@ public:
   void SetLat(double lat);
   void SetLon(double lon);
   void SetLabelText();
+  void SetCoordinateIndex(int idx) {
+    m_coordinateIndex = idx;
+    SetLabelText();
+  }
   int GetCoordinateIndex() { return m_coordinateIndex; }
 
 private:

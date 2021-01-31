@@ -13,6 +13,8 @@ MainWidget::MainWidget() {
           &MainWidget::on_AddLatLonPairToUI);
   connect(markerModel, &MarkerModel::ChangeCoordinateWidget, this,
           &MainWidget::on_ChangeCoordinateWidget);
+  connect(markerModel, &MarkerModel::RMMarkerOne, this,
+          &MainWidget::on_RMFirstMarker);
   SetupHLayout(m_addMarkerlayout, Qt::AlignLeft);
   SetupVLayout(m_coordinateLayout, Qt::AlignTop);
 }
@@ -163,5 +165,29 @@ void MainWidget::on_ChangeCoordinateWidget(int idx, double lat, double lon) {
       coordinateWidget->SetLat(lat);
       coordinateWidget->SetLon(lon);
     }
+  }
+}
+
+void MainWidget::on_RMFirstMarker() {
+  std::cout << "RMing MARKER" << std::endl;
+  QList<CoordinateWidget *> CoordinateWidgetList =
+      this->findChildren<CoordinateWidget *>();
+  foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
+    if (coordinateWidget->GetCoordinateIndex() == 1) {
+      delete coordinateWidget;
+    }
+  }
+  ResetMarkerIndex();
+}
+
+void MainWidget::ResetMarkerIndex() {
+  m_markerIndex = 1;
+  QList<CoordinateWidget *> CoordinateWidgetList =
+      this->findChildren<CoordinateWidget *>();
+  foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
+    coordinateWidget->SetCoordinateIndex(m_markerIndex);
+    ++m_markerIndex;
+    std::cout << "SET COORDINATE INDEX TO "
+              << coordinateWidget->GetCoordinateIndex() << std::endl;
   }
 }

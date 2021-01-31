@@ -40,6 +40,7 @@ public slots:
   void on_AddLatLonPairToUI(double lat, double lon);
   void on_scenarioTypechanged();
   void on_ChangeCoordinateWidget(int idx, double lat, double lon);
+  void on_RMFirstMarker();
 
 private:
   void SetupVLayout(QVBoxLayout *vlayout, Qt::Alignment alignment);
@@ -52,7 +53,7 @@ private:
   void clearCoordinatelayout();
   void SetupHorizontalLayout();
   void SetupVerticalLayout();
-
+  void ResetMarkerIndex();
   // Map Widget layout
   QHBoxLayout *m_hLayout = nullptr;
   QVBoxLayout *m_vLayout = nullptr;
