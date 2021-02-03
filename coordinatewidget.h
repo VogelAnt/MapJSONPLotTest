@@ -20,13 +20,13 @@ public:
     SetLabelText();
   }
   int GetCoordinateIndex() { return m_coordinateIndex; }
+  QPushButton *m_removeCoordinatebutton = nullptr;
 
 private:
   void SetupHLayout(QHBoxLayout *hlayout, Qt::Alignment alignment);
   void SetupLayout();
   int m_coordinateIndex = 0;
   QHBoxLayout *m_coordinateLayout = nullptr;
-  QPushButton *m_removeCoordinatebutton = nullptr;
   QLabel *m_coordinateLabel = nullptr;
   double m_lat;
   double m_lon;

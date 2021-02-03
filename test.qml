@@ -28,6 +28,10 @@ Item{
                 markerCount = markerModel.resetMarkerCount()
                 changeBorderColor()
             }
+            onRemoveMarkerFromUI:{
+                console.log("received marker index from C++ " + marker_idx)
+
+            }
     }
 
     ListModel{
@@ -163,7 +167,6 @@ Item{
         path[index] = coordinate
         polygon.path = path
         console.log("MOVING MARKER CURRENT INDEX "+currentIndex)
-
 //        polygon.removeCoordinate(polygon.path)
     }
 

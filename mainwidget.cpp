@@ -22,6 +22,8 @@ MainWidget::MainWidget() {
 void MainWidget::on_AddLatLonPairToUI(double lat, double lon) {
   CoordinateWidget *coordinateWidget =
       new CoordinateWidget(this, m_markerIndex, lat, lon);
+  connect(coordinateWidget->m_removeCoordinatebutton, &QPushButton::clicked,
+          this, &MainWidget::on_RemoveCoordinateWidget);
   m_coordinateLayout->addWidget(coordinateWidget);
   ++m_markerIndex;
 }
@@ -190,4 +192,19 @@ void MainWidget::ResetMarkerIndex() {
     std::cout << "SET COORDINATE INDEX TO "
               << coordinateWidget->GetCoordinateIndex() << std::endl;
   }
+}
+
+void MainWidget::on_RemoveCoordinateWidget() {
+  CoordinateWidget *cordWidg = qobject_cast<CoordinateWidget *>(
+      qobject_cast<QPushButton *>(sender())->parent());
+  std::cout << "Removed Coordinate Widget of index "
+            << cordWidg->GetCoordinateIndex() << std::endl;
+  markerModel->removeMarkerFromUI(cordWidg->GetCoordinateIndex());
+  delete qobject_cast<QPushButton *>(sender())->parent();
+  ResetMarkerIndex();
+}
+
+void MainWidget::on_AddCoordinateButtonclicked() {
+  emit markerModel->addMarkerAtLatLon(m_latEdit->text().toDouble(),
+                                      m_lonEdit->text().toDouble());
 }

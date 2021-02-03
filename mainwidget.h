@@ -78,6 +78,7 @@ private:
   QMap<QString, bool> m_scenarioMap;
   MarkerModel *markerModel = nullptr;
   int m_markerIndex = 1;
+
 private slots:
   // TODO: Add to Trajectory Editor
   /**
@@ -94,6 +95,8 @@ private slots:
   // TODO: Add to Trajectory Editor
   void on_ScenarioChanged();
   void on_textSwitched();
+  void on_RemoveCoordinateWidget();
+  void on_AddCoordinateButtonclicked();
 };
 
 #endif // TESTWIDGET_H

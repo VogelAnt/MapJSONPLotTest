@@ -62,12 +62,15 @@ public:
   void SetSingleScenario(bool status);
   void SetDrawScenario(bool status);
   void AddLatLonLabel(int markerCount, double lat, double lon);
+
 signals:
   void pathChanged();
   void comboBoxSelectionChanged();
   void AddLatLonPairToUI(double lat, double lon);
   void ChangeCoordinateWidget(int idx, double lat, double lon);
   void RMMarkerOne();
+  void removeMarkerFromUI(int marker_idx);
+  void addMarkerAtLatLon(double lat, double lon);
 
 private:
   bool m_singleScenario = true;
