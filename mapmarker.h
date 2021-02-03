@@ -70,7 +70,7 @@ signals:
   void ChangeCoordinateWidget(int idx, double lat, double lon);
   void RMMarkerOne();
   void removeMarkerFromUI(int marker_idx);
-  void addMarkerAtLatLon(double lat, double lon);
+  void addMarkerAtCoordinate(QGeoCoordinate coord_from_UI);
 
 private:
   bool m_singleScenario = true;

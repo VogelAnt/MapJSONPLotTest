@@ -19,18 +19,17 @@ Item{
         target: markerModel
             onComboBoxSelectionChanged:{
                 polygonmodel.clear()
-//                for(var i = 0; i< polygonmodel.count; ++i){
-//                    console.log(polygonmodel.itemsInserted())
-//                }
-
 //                polygon.path.clear()
                 console.log("RECEIVED CHANGE SIGNAL FROM C++ IN QML")
                 markerCount = markerModel.resetMarkerCount()
                 changeBorderColor()
             }
             onRemoveMarkerFromUI:{
-                console.log("received marker index from C++ " + marker_idx)
-
+                console.log("received REMOVE marker index from C++ " + marker_idx)
+            }
+            onAddMarkerAtCoordinate:{
+                console.log("Add marker at " + coord_from_UI)
+                addMarker(coord_from_UI)
             }
     }
 

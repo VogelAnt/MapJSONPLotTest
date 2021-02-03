@@ -15,6 +15,8 @@ MainWidget::MainWidget() {
           &MainWidget::on_ChangeCoordinateWidget);
   connect(markerModel, &MarkerModel::RMMarkerOne, this,
           &MainWidget::on_RMFirstMarker);
+  connect(m_addCoordinatebutton, &QPushButton::clicked, this,
+          &MainWidget::on_AddCoordinateButtonclicked);
   SetupHLayout(m_addMarkerlayout, Qt::AlignLeft);
   SetupVLayout(m_coordinateLayout, Qt::AlignTop);
 }
@@ -205,6 +207,9 @@ void MainWidget::on_RemoveCoordinateWidget() {
 }
 
 void MainWidget::on_AddCoordinateButtonclicked() {
-  emit markerModel->addMarkerAtLatLon(m_latEdit->text().toDouble(),
-                                      m_lonEdit->text().toDouble());
+  std::cout << "Adding Coordinate at " << m_latEdit->text().toDouble() << " : "
+            << m_lonEdit->text().toDouble() << std::endl;
+  // TODO: convert to GeoCoordinate
+  emit markerModel->addMarkerAtCoordinate(QGeoCoordinate(
+      m_latEdit->text().toDouble(), m_lonEdit->text().toDouble(), 0));
 }
