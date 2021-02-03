@@ -22,6 +22,8 @@ MainWidget::MainWidget() {
 void MainWidget::on_AddLatLonPairToUI(double lat, double lon) {
   CoordinateWidget *coordinateWidget =
       new CoordinateWidget(this, m_markerIndex, lat, lon);
+  connect(coordinateWidget->m_removeCoordinatebutton, &QPushButton::clicked,
+          this, &MainWidget::on_RemoveCoordinateWidget);
   m_coordinateLayout->addWidget(coordinateWidget);
   ++m_markerIndex;
 }
@@ -65,7 +67,6 @@ void MainWidget::SetupQuickLayout() {
 }
 
 void MainWidget::on_textSwitched() {
-  emit markerModel->comboBoxSelectionChanged();
   QString dropBoxtext = m_scenarioCombobox->currentText();
   if (dropBoxtext == "Single Static Scenario") {
     markerModel->SetDrawScenario(false);
@@ -79,6 +80,7 @@ void MainWidget::on_textSwitched() {
     markerModel->SetSingleScenario(false);
     markerModel->SetDrawScenario(false);
   }
+  emit markerModel->comboBoxSelectionChanged();
   std::cout << "Emitted the marker model selection changed " << std::endl;
 }
 
@@ -190,4 +192,14 @@ void MainWidget::ResetMarkerIndex() {
     std::cout << "SET COORDINATE INDEX TO "
               << coordinateWidget->GetCoordinateIndex() << std::endl;
   }
+}
+
+void MainWidget::on_RemoveCoordinateWidget() {
+  CoordinateWidget *cordWidg = qobject_cast<CoordinateWidget *>(
+      qobject_cast<QPushButton *>(sender())->parent());
+  std::cout << "Removed Coordinate Widget of index "
+            << cordWidg->GetCoordinateIndex() << std::endl;
+  markerModel->removeMarkerFromUI(cordWidg->GetCoordinateIndex());
+  delete qobject_cast<QPushButton *>(sender())->parent();
+  ResetMarkerIndex();
 }

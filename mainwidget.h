@@ -94,6 +94,7 @@ private slots:
   // TODO: Add to Trajectory Editor
   void on_ScenarioChanged();
   void on_textSwitched();
+  void on_RemoveCoordinateWidget();
 };
 
 #endif // TESTWIDGET_H

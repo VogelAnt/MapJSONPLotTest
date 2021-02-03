@@ -34,8 +34,14 @@ public:
                              QDateTime dateTime = QDateTime::currentDateTime());
   Q_INVOKABLE int getMarkerCount() { return m_markerCount; }
   Q_INVOKABLE void increaseMarkerCount() { ++m_markerCount; }
-  Q_INVOKABLE bool getSingleScenarioStatus() { return m_singleScenario; }
-  Q_INVOKABLE bool getDrawScenarioStatus() { return m_drawScenario; }
+  Q_INVOKABLE bool getSingleScenarioStatus() {
+    std::cout << "SINGLE SCENARIO STATUS IS " << m_singleScenario << std::endl;
+    return m_singleScenario;
+  }
+  Q_INVOKABLE bool getDrawScenarioStatus() {
+    std::cout << "DRAW SCENARIO STATUS IS " << m_drawScenario << std::endl;
+    return m_drawScenario;
+  }
   Q_INVOKABLE int resetMarkerCount() {
     m_markerCount = 0;
     return m_markerCount;
@@ -67,9 +73,10 @@ signals:
   void AddLatLonPairToUI(double lat, double lon);
   void ChangeCoordinateWidget(int idx, double lat, double lon);
   void RMMarkerOne();
+  void removeMarkerFromUI(int marker_idx);
 
 private:
-  bool m_singleScenario = true;
+  bool m_singleScenario = false;
   bool m_drawScenario = false;
   QVector<QPair<double, double>> m_LatLonVector;
   QVector<gpxCoordinate> m_coordinates;
