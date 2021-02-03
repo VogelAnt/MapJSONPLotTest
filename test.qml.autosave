@@ -163,7 +163,6 @@ Item{
         path[index] = coordinate
         polygon.path = path
         console.log("MOVING MARKER CURRENT INDEX "+currentIndex)
-
 //        polygon.removeCoordinate(polygon.path)
     }
 

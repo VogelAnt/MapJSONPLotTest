@@ -34,6 +34,7 @@ public:
                              QDateTime dateTime = QDateTime::currentDateTime());
   Q_INVOKABLE int getMarkerCount() { return m_markerCount; }
   Q_INVOKABLE void increaseMarkerCount() { ++m_markerCount; }
+  Q_INVOKABLE void decreaseMarkerCount() { --m_markerCount; }
   Q_INVOKABLE bool getSingleScenarioStatus() { return m_singleScenario; }
   Q_INVOKABLE bool getDrawScenarioStatus() { return m_drawScenario; }
   Q_INVOKABLE int resetMarkerCount() {
