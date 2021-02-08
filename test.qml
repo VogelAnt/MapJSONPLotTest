@@ -30,6 +30,11 @@ Item{
             onAddMarkerAtCoordinate:{
                 console.log("Add marker at " + coord_from_UI)
                 addMarker(coord_from_UI)
+                markerModel.increaseMarkerCount()
+                markerModel.addMarker(coord_from_UI)
+                changeBorderColor()
+                console.log("Added marker at "+coord_from_UI)
+                console.log("CURRENT INDEX "+currentIndex)
             }
     }
 
@@ -86,6 +91,7 @@ Item{
             onDoubleClicked: {
                 var point = Qt.point(mouse.x, mouse.y)
                 var coord = map.toCoordinate(point);
+                // call Function from here with
                 if (mouse.button == Qt.LeftButton){
                     if(markerModel.getSingleScenarioStatus()){
                         console.log("IN SINGLE SCENARIO SELECTED")
