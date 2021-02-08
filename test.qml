@@ -29,12 +29,14 @@ Item{
             }
             onAddMarkerAtCoordinate:{
                 console.log("Add marker at " + coord_from_UI)
-                addMarker(coord_from_UI)
-                markerModel.increaseMarkerCount()
-                markerModel.addMarker(coord_from_UI)
-                changeBorderColor()
-                console.log("Added marker at "+coord_from_UI)
-                console.log("CURRENT INDEX "+currentIndex)
+                checkScenarioSelection(coord_from_UI)
+                map.center = coord_from_UI
+//                addMarker(coord_from_UI)
+//                markerModel.increaseMarkerCount()
+//                markerModel.addMarker(coord_from_UI)
+//                changeBorderColor()
+//                console.log("Added marker at "+coord_from_UI)
+//                console.log("CURRENT INDEX "+currentIndex)
             }
     }
 
@@ -44,6 +46,8 @@ Item{
 
     Map {
         id: map
+//        gesture.acceptedGestures: MapGestureArea.PanGesture | MapGestureArea.FlickGesture | MapGestureArea.PinchGesture | MapGestureArea.RotationGesture | MapGestureArea.TiltGesture
+//        gesture.flickDeceleration: 3000
         anchors.fill: parent
         plugin: Plugin {
             name: "osm"
@@ -52,7 +56,7 @@ Item{
         gesture.enabled: currentIndex == -1
         center: QtPositioning.coordinate(59.91, 10.75) // Oslo
         zoomLevel: 14
-        MapItemView{
+        MapItemView{            
             z: polygon.z + 1
             model: polygonmodel
             delegate: MapQuickItem{
@@ -93,34 +97,7 @@ Item{
                 var coord = map.toCoordinate(point);
                 // call Function from here with
                 if (mouse.button == Qt.LeftButton){
-                    if(markerModel.getSingleScenarioStatus()){
-                        console.log("IN SINGLE SCENARIO SELECTED")
-                        if(markerModel.getMarkerCount() < 1){
-                            addMarker(coord)
-                            markerModel.increaseMarkerCount()
-                            markerModel.addMarker(coord)
-                            changeBorderColor()
-                            console.log("Added marker at "+coord)
-                            console.log("CURRENT INDEX "+currentIndex)
-                        }
-                    }
-                    else if(markerModel.getDrawScenarioStatus()){
-                        // TODO: change marker color to
-                        addMarker(coord)
-                        changeBorderColor()
-                        markerModel.increaseMarkerCount()
-                        markerModel.addMarker(coord)
-                        console.log("CURRENT INDEX "+currentIndex)
-                        console.log("Added marker at "+coord)
-                    }
-                    else{
-                        addMarker(coord)
-                        changeBorderColor()
-                        markerModel.increaseMarkerCount()
-                        markerModel.addMarker(coord)
-                        console.log("CURRENT INDEX "+currentIndex)
-                        console.log("Added marker at "+coord)
-                    }
+                    checkScenarioSelection(coord)
                 }
             }
 
@@ -188,6 +165,37 @@ Item{
         console.log(markerCount)
         markerCount = markerCount+1
         console.log("ADDING MARKER CURRENT INDEX "+currentIndex)
+    }
+
+    function checkScenarioSelection(coord){
+        if(markerModel.getSingleScenarioStatus()){
+            console.log("IN SINGLE SCENARIO SELECTED")
+            if(markerModel.getMarkerCount() < 1){
+                addMarker(coord)
+                markerModel.increaseMarkerCount()
+                markerModel.addMarker(coord)
+                changeBorderColor()
+                console.log("Added marker at "+coord)
+                console.log("CURRENT INDEX "+currentIndex)
+            }
+        }
+        else if(markerModel.getDrawScenarioStatus()){
+            // TODO: change marker color to
+            addMarker(coord)
+            changeBorderColor()
+            markerModel.increaseMarkerCount()
+            markerModel.addMarker(coord)
+            console.log("CURRENT INDEX "+currentIndex)
+            console.log("Added marker at "+coord)
+        }
+        else{
+            addMarker(coord)
+            changeBorderColor()
+            markerModel.increaseMarkerCount()
+            markerModel.addMarker(coord)
+            console.log("CURRENT INDEX "+currentIndex)
+            console.log("Added marker at "+coord)
+        }
     }
 
     function changeBorderColor(){
