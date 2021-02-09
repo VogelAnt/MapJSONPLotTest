@@ -30,7 +30,9 @@ Item{
             onAddMarkerAtCoordinate:{
                 console.log("Add marker at " + coord_from_UI)
                 checkScenarioSelection(coord_from_UI)
-                map.center = coord_from_UI
+                if((markerModel.getSingleScenarioStatus()) & (markerModel.getMarkerCount() < 1)){
+                    map.center = coord_from_UI
+                }
 //                addMarker(coord_from_UI)
 //                markerModel.increaseMarkerCount()
 //                markerModel.addMarker(coord_from_UI)
