@@ -31,6 +31,7 @@ void MainWidget::on_AddLatLonPairToUI(double lat, double lon) {
 }
 
 void MainWidget::SetupGeneralLayout() {
+  this->setMinimumSize(800, 500);
   m_hLayout = new QHBoxLayout(this);
   //  m_w1 = new QWidget(this);
   m_w2 = new QWidget(this);
@@ -64,6 +65,8 @@ void MainWidget::SetupQuickLayout() {
   qWidget = new QQuickWidget(this);
   qWidget->rootContext()->setContextProperty("markerModel", markerModel);
   qWidget->setSource(QUrl("qrc:/test.qml"));
+  qWidget->setFocus();
+  qWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
   m_vLayout->addWidget(m_scenarioCombobox, 1);
   m_vLayout->addWidget(qWidget, 1);
 }

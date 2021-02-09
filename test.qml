@@ -7,8 +7,8 @@ import QtQuick.Controls 2.12
 Item{
     id: customMap
     visible: true
-    width: 640
-    height: 480
+//    width: 640
+//    height: 480
     property int markerCount: 0
     property int currentIndex: -1
     property bool singleScenario: false
