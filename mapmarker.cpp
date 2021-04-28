@@ -25,6 +25,8 @@ void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
   m_coordinates.append(item);
   endInsertRows();
+  std::string coord_as_str = coordinate.toString().toStdString();
+  std::cout << "Coordinate by itself" << coord_as_str << std::endl;
   std::cout << "LAT: " << coordinate.latitude()
             << " LON: " << coordinate.longitude() << std::endl;
   m_LatLonVector.append(latLonpair);

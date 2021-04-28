@@ -5,6 +5,9 @@
 #include "coordinatewidget.h"
 
 #include <iostream>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
 #include <QObject>
 #include <QWidget>
 #include <QObject>
@@ -54,6 +57,7 @@ private:
   void SetupHorizontalLayout();
   void SetupVerticalLayout();
   void ResetMarkerIndex();
+  void SetupMenuBar();
   // Map Widget layout
   QHBoxLayout *m_hLayout = nullptr;
   QVBoxLayout *m_vLayout = nullptr;
@@ -77,6 +81,10 @@ private:
   QPushButton *m_addCoordinatebutton = nullptr;
   QMap<QString, bool> m_scenarioMap;
   MarkerModel *markerModel = nullptr;
+  QMenuBar *m_menuBar = nullptr;
+  QMenu *m_fileMenu = nullptr;
+  QAction *m_saveAction = nullptr;
+  QAction *m_loadAction = nullptr;
   int m_markerIndex = 1;
 
 private slots:
@@ -97,6 +105,8 @@ private slots:
   void on_textSwitched();
   void on_RemoveCoordinateWidget();
   void on_AddCoordinateButtonclicked();
+  void on_SaveActionTriggered();
+  void on_LoadActionTriggered();
 };
 
 #endif // TESTWIDGET_H

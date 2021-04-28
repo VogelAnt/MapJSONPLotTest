@@ -3,6 +3,7 @@
 MainWidget::MainWidget() {
   SetupScenarioMap();
   SetupGeneralLayout();
+  SetupMenuBar();
   connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
           &MainWidget::on_ScenarioChanged);
   connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
@@ -17,6 +18,10 @@ MainWidget::MainWidget() {
           &MainWidget::on_RMFirstMarker);
   connect(m_addCoordinatebutton, &QPushButton::clicked, this,
           &MainWidget::on_AddCoordinateButtonclicked);
+  connect(m_loadAction, &QAction::triggered, this,
+          &MainWidget::on_LoadActionTriggered);
+  connect(m_saveAction, &QAction::triggered, this,
+          &MainWidget::on_SaveActionTriggered);
   SetupHLayout(m_addMarkerlayout, Qt::AlignLeft);
   SetupVLayout(m_coordinateLayout, Qt::AlignTop);
 }
@@ -30,19 +35,30 @@ void MainWidget::on_AddLatLonPairToUI(double lat, double lon) {
   ++m_markerIndex;
 }
 
+void MainWidget::SetupMenuBar() {
+  m_menuBar = new QMenuBar(this);
+  m_fileMenu = new QMenu("&File", this);
+  m_menuBar->addMenu(m_fileMenu);
+  m_saveAction = new QAction("&Save", this);
+  m_loadAction = new QAction("&Load", this);
+  m_fileMenu->addAction(m_saveAction);
+  m_fileMenu->addAction(m_loadAction);
+  this->layout()->setMenuBar(m_menuBar);
+}
+
 void MainWidget::SetupGeneralLayout() {
   this->setMinimumSize(800, 500);
   m_hLayout = new QHBoxLayout(this);
   //  m_w1 = new QWidget(this);
   m_w2 = new QWidget(this);
   //  m_w1->setStyleSheet("background-color : red");
-  m_w2->setStyleSheet("background-color : blue");
+  //  m_w2->setStyleSheet("background-color : blue");
   //  m_hLayout->addWidget(m_w1, 1);
   SetupCoordinateLayout();
   SetupQuickLayout();
   m_hLayout->addLayout(m_coordinateLayout, 1);
-  m_hLayout->addLayout(m_vLayout, 1);
-  m_hLayout->addWidget(m_w2, 1);
+  m_hLayout->addLayout(m_vLayout, 3);
+  //  m_hLayout->addWidget(m_w2, 1);
 }
 
 void MainWidget::SetupScenarioMap() {
@@ -165,6 +181,7 @@ void MainWidget::clearCoordinatelayout() {
 }
 
 void MainWidget::on_ChangeCoordinateWidget(int idx, double lat, double lon) {
+  // TODO: There be leaks here ! Brian Cairns memory chapter !
   QList<CoordinateWidget *> CoordinateWidgetList =
       this->findChildren<CoordinateWidget *>();
   foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
@@ -216,3 +233,7 @@ void MainWidget::on_AddCoordinateButtonclicked() {
   emit markerModel->addMarkerAtCoordinate(QGeoCoordinate(
       m_latEdit->text().toDouble(), m_lonEdit->text().toDouble(), 0));
 }
+
+void MainWidget::on_SaveActionTriggered() {}
+
+void MainWidget::on_LoadActionTriggered() {}
