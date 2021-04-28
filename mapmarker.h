@@ -1,6 +1,8 @@
 #ifndef MAPMARKER_H
 #define MAPMARKER_H
 
+#include "filemanager.h"
+
 #include <iostream>
 #include <cmath>
 #include <QObject>
@@ -22,13 +24,13 @@ struct gpxCoordinate {
 /**
  * @brief The MarkerModel class
  */
-class MarkerModel : public QAbstractListModel {
+class MapMarker : public QAbstractListModel {
   Q_OBJECT
   Q_PROPERTY(QVariantList path READ path NOTIFY pathChanged)
 
 public:
   enum MarkerRoles { positionRole = Qt::UserRole, pathRole };
-  MarkerModel(QObject *parent = nullptr);
+  MapMarker(QObject *parent = nullptr);
   Q_INVOKABLE void addMarker(const QGeoCoordinate &coordinate,
                              float elevation = 0,
                              QDateTime dateTime = QDateTime::currentDateTime());
@@ -76,7 +78,8 @@ private:
   bool m_singleScenario = true;
   bool m_drawScenario = false;
   QVector<QPair<double, double>> m_LatLonVector;
-  QVector<gpxCoordinate> m_coordinates;
+  QVector<gpxCoordinate> m_gpxcoordinatevector;
+  QVector<QGeoCoordinate> m_geoCoordinatevector;
   int m_markerCount = 0;
 };
 #endif // MARKERMODEL_H

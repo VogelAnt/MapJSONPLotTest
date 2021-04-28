@@ -10,11 +10,11 @@ MainWidget::MainWidget() {
           &MainWidget::on_textSwitched);
   connect(m_scenarioCombobox, &QComboBox::currentTextChanged, this,
           &MainWidget::on_scenarioTypechanged);
-  connect(markerModel, &MarkerModel::AddLatLonPairToUI, this,
+  connect(markerModel, &MapMarker::AddLatLonPairToUI, this,
           &MainWidget::on_AddLatLonPairToUI);
-  connect(markerModel, &MarkerModel::ChangeCoordinateWidget, this,
+  connect(markerModel, &MapMarker::ChangeCoordinateWidget, this,
           &MainWidget::on_ChangeCoordinateWidget);
-  connect(markerModel, &MarkerModel::RMMarkerOne, this,
+  connect(markerModel, &MapMarker::RMMarkerOne, this,
           &MainWidget::on_RMFirstMarker);
   connect(m_addCoordinatebutton, &QPushButton::clicked, this,
           &MainWidget::on_AddCoordinateButtonclicked);
@@ -77,7 +77,7 @@ void MainWidget::SetupQuickLayout() {
                           << "Custom Dynamic Scenario"
                           << "GeoCode Scenario";
   m_scenarioCombobox->addItems(m_scenarioSelectionlist);
-  markerModel = new MarkerModel();
+  markerModel = new MapMarker();
   qWidget = new QQuickWidget(this);
   qWidget->rootContext()->setContextProperty("markerModel", markerModel);
   qWidget->setSource(QUrl("qrc:/test.qml"));
@@ -181,7 +181,7 @@ void MainWidget::clearCoordinatelayout() {
 }
 
 void MainWidget::on_ChangeCoordinateWidget(int idx, double lat, double lon) {
-  // TODO: There be leaks here ! Brian Cairns memory chapter !
+  // TODO: There be leaks here !
   QList<CoordinateWidget *> CoordinateWidgetList =
       this->findChildren<CoordinateWidget *>();
   foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
@@ -234,6 +234,15 @@ void MainWidget::on_AddCoordinateButtonclicked() {
       m_latEdit->text().toDouble(), m_lonEdit->text().toDouble(), 0));
 }
 
-void MainWidget::on_SaveActionTriggered() {}
+void MainWidget::on_SaveActionTriggered() {
+  // TODO: trigger file manager to save specified file !
+  m_fileManager.SaveLocations();
+}
 
-void MainWidget::on_LoadActionTriggered() {}
+void MainWidget::on_LoadActionTriggered() {
+  // "/home/tony/Documents/MapJSONPlotTest/LocationFiles"
+  QString fileName = QFileDialog::getOpenFileName(this, "Open position file",
+                                                  QDir::currentPath(),
+                                                  "JSON files (*.*);;(*.json)");
+  // TODO: trigger file manager to load specified file
+}

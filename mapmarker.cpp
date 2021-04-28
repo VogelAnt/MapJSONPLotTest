@@ -1,20 +1,18 @@
 #include "mapmarker.h"
 
-MarkerModel::MarkerModel(QObject *parent) : QAbstractListModel(parent) {
+MapMarker::MapMarker(QObject *parent) : QAbstractListModel(parent) {
   connect(this, &QAbstractListModel::rowsInserted, this,
-          &MarkerModel::pathChanged);
+          &MapMarker::pathChanged);
   connect(this, &QAbstractListModel::rowsRemoved, this,
-          &MarkerModel::pathChanged);
+          &MapMarker::pathChanged);
   connect(this, &QAbstractListModel::dataChanged, this,
-          &MarkerModel::pathChanged);
-  connect(this, &QAbstractListModel::modelReset, this,
-          &MarkerModel::pathChanged);
-  connect(this, &QAbstractListModel::rowsMoved, this,
-          &MarkerModel::pathChanged);
+          &MapMarker::pathChanged);
+  connect(this, &QAbstractListModel::modelReset, this, &MapMarker::pathChanged);
+  connect(this, &QAbstractListModel::rowsMoved, this, &MapMarker::pathChanged);
 }
 
-void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
-                            QDateTime dateTime) {
+void MapMarker::addMarker(const QGeoCoordinate &coordinate, float elevation,
+                          QDateTime dateTime) {
   QPair<double, double> latLonpair;
   latLonpair.first = coordinate.latitude();
   latLonpair.second = coordinate.longitude();
@@ -23,14 +21,18 @@ void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
   item.ele = elevation;
   item.time = dateTime;
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
-  m_coordinates.append(item);
+  m_gpxcoordinatevector.append(item);
   endInsertRows();
   std::string coord_as_str = coordinate.toString().toStdString();
   std::cout << "Coordinate by itself" << coord_as_str << std::endl;
   std::cout << "LAT: " << coordinate.latitude()
             << " LON: " << coordinate.longitude() << std::endl;
-  m_LatLonVector.append(latLonpair);
   emit AddLatLonPairToUI(coordinate.latitude(), coordinate.longitude());
+  m_geoCoordinatevector.append(coordinate);
+  for (auto &coord : m_LatLonVector) {
+  }
+  //  m_LatLonVector.append(latLonpair);
+
   //  std::cout << "COORDINATES : " << coordinate.toString().toStdString() <<
   //  "\n"
   //            << "ELEVATION : " << QString::number(elevation).toStdString()
@@ -45,63 +47,62 @@ void MarkerModel::addMarker(const QGeoCoordinate &coordinate, float elevation,
   // TODO: or do the setting of way points free flow
 }
 
-void MarkerModel::changeMarkerPosition(int markerindex,
-                                       const QGeoCoordinate &coordinate,
-                                       float elevation, QDateTime dateTime) {
+void MapMarker::changeMarkerPosition(int markerindex,
+                                     const QGeoCoordinate &coordinate,
+                                     float elevation, QDateTime dateTime) {
   emit ChangeCoordinateWidget(markerindex, coordinate.latitude(),
                               coordinate.longitude());
 }
 
-int MarkerModel::rowCount(const QModelIndex &parent) const {
+int MapMarker::rowCount(const QModelIndex &parent) const {
   if (parent.isValid()) {
     return 0;
   }
-  return m_coordinates.count();
+  return m_gpxcoordinatevector.count();
 }
 
-// TODO: read the doc of QAbstractItemModel
-bool MarkerModel::removeRows(int row, int count, const QModelIndex &parent) {
+bool MapMarker::removeRows(int row, int count, const QModelIndex &parent) {
   std::cout << "Now in removeRows" << std::endl;
-  if (row + count > m_coordinates.count() || row < 0)
+  if (row + count > m_gpxcoordinatevector.count() || row < 0)
     return false;
   beginRemoveRows(parent, row, row + count - 1);
   for (int i = 0; i < count; ++i)
-    m_coordinates.removeAt(row + i);
+    m_gpxcoordinatevector.removeAt(row + i);
   endRemoveRows();
   return true;
 }
 
-bool MarkerModel::removeRow(int row, const QModelIndex &parent) {
+bool MapMarker::removeRow(int row, const QModelIndex &parent) {
   return removeRows(row, 1, parent);
 }
 
-QVariant MarkerModel::data(const QModelIndex &index, int role) const {
-  if (index.row() < 0 || index.row() >= m_coordinates.count())
+QVariant MapMarker::data(const QModelIndex &index, int role) const {
+  if (index.row() < 0 || index.row() >= m_gpxcoordinatevector.count())
     return QVariant();
   if (role == Qt::DisplayRole)
     return QVariant::fromValue(index.row());
-  else if (role == MarkerModel::positionRole) {
-    return QVariant::fromValue(m_coordinates[index.row()].latlon);
+  else if (role == MapMarker::positionRole) {
+    return QVariant::fromValue(m_gpxcoordinatevector[index.row()].latlon);
   }
   return QVariant();
 }
 
-QHash<int, QByteArray> MarkerModel::roleNames() const {
+QHash<int, QByteArray> MapMarker::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[positionRole] = "positionRole";
   return roles;
 }
 
-QVariantList MarkerModel::path() const {
+QVariantList MapMarker::path() const {
   QVariantList path;
-  for (const gpxCoordinate &coord : m_coordinates) {
+  for (const gpxCoordinate &coord : m_gpxcoordinatevector) {
     path << QVariant::fromValue(coord.latlon);
   }
   return path;
 }
 
-double MarkerModel::HaversineDistanceInKm(double lat_1, double lat_2,
-                                          double lon_1, double lon_2) {
+double MapMarker::HaversineDistanceInKm(double lat_1, double lat_2,
+                                        double lon_1, double lon_2) {
   // Compute distance between longitude and latitude
   double dLat = (lat_2 - lat_1) * M_PI / 180.0;
   double dLon = (lon_2 - lon_1) * M_PI / 180.0;
@@ -116,25 +117,25 @@ double MarkerModel::HaversineDistanceInKm(double lat_1, double lat_2,
   return earthRadius * c;
 }
 
-void MarkerModel::SetSingleScenario(bool status) {
+void MapMarker::SetSingleScenario(bool status) {
   m_singleScenario = status;
   std::cout << "Single scenario status is "
             << QString::number(status).toStdString() << std::endl;
 }
 
-void MarkerModel::SetDrawScenario(bool status) {
+void MapMarker::SetDrawScenario(bool status) {
   m_drawScenario = status;
   std::cout << "Draw Scenario Status is "
             << QString::number(status).toStdString() << std::endl;
 }
 
-void MarkerModel::removeFirstMarker() {
+void MapMarker::removeFirstMarker() {
   decreaseMarkerCount();
   emit RMMarkerOne();
 }
 
-double MarkerModel::HaversineDistanceInMeters(double lat_1, double lat_2,
-                                              double lon_1, double lon_2) {
+double MapMarker::HaversineDistanceInMeters(double lat_1, double lat_2,
+                                            double lon_1, double lon_2) {
   // Compute distance between longitude and latitude
   double dLat = (lat_2 - lat_1) * M_PI / 180.0;
   double dLon = (lon_2 - lon_1) * M_PI / 180.0;

@@ -3,6 +3,7 @@
 
 #include "mapmarker.h"
 #include "coordinatewidget.h"
+#include "filemanager.h"
 
 #include <iostream>
 #include <QMenuBar>
@@ -80,11 +81,12 @@ private:
   QLineEdit *m_lonEdit = nullptr;
   QPushButton *m_addCoordinatebutton = nullptr;
   QMap<QString, bool> m_scenarioMap;
-  MarkerModel *markerModel = nullptr;
+  MapMarker *markerModel = nullptr;
   QMenuBar *m_menuBar = nullptr;
   QMenu *m_fileMenu = nullptr;
   QAction *m_saveAction = nullptr;
   QAction *m_loadAction = nullptr;
+  FileManager m_fileManager;
   int m_markerIndex = 1;
 
 private slots:

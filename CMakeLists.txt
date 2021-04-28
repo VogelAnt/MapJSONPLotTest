@@ -46,6 +46,8 @@ else()
     routewidget.h
     routewidget.cpp
     Resources.qrc
+    filemanager.h
+    filemanager.cpp
     test.qml
   )
 endif()
