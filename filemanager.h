@@ -20,7 +20,10 @@ public:
    * @brief SetupFileStructure
    * Create the directories and basic for scenarios and users
    */
-  void SaveLocations();
+  void SaveLocations(QVector<QPair<QString, QString>> latLonvec);
+  void LoadLocations(QString fileName);
+signals:
+  void SendLatLonVec(QVector<QPair<QString, QString>> latLonVec);
 
 private:
   void InitialSetup();

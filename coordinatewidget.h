@@ -15,6 +15,8 @@ public:
   void SetLat(double lat);
   void SetLon(double lon);
   void SetLabelText();
+  QString GetLat() { return QString::number(m_lat); };
+  QString GetLon() { return QString::number(m_lon); }
   void SetCoordinateIndex(int idx) {
     m_coordinateIndex = idx;
     SetLabelText();

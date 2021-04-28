@@ -56,7 +56,7 @@ Item{
         }
 
         gesture.enabled: currentIndex == -1
-        center: QtPositioning.coordinate(59.91, 10.75) // Oslo
+        center: QtPositioning.coordinate(48.35, 11.7764) // Flughafen München
         zoomLevel: 14
         MapItemView{            
             z: polygon.z + 1

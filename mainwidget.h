@@ -45,6 +45,7 @@ public slots:
   void on_scenarioTypechanged();
   void on_ChangeCoordinateWidget(int idx, double lat, double lon);
   void on_RMFirstMarker();
+  void on_SendLatLonVector(QVector<QPair<QString, QString>> latLonvec);
 
 private:
   void SetupVLayout(QVBoxLayout *vlayout, Qt::Alignment alignment);

@@ -235,8 +235,17 @@ void MainWidget::on_AddCoordinateButtonclicked() {
 }
 
 void MainWidget::on_SaveActionTriggered() {
-  // TODO: trigger file manager to save specified file !
-  m_fileManager.SaveLocations();
+  // TODO: get a vector with all the
+  QVector<QPair<QString, QString>> latLonvec;
+  QList<CoordinateWidget *> CoordinateWidgetList =
+      this->findChildren<CoordinateWidget *>();
+  foreach (CoordinateWidget *coordinateWidget, CoordinateWidgetList) {
+    QPair<QString, QString> coord_pair;
+    coord_pair.first = coordinateWidget->GetLat();
+    coord_pair.second = coordinateWidget->GetLon();
+    latLonvec.append(coord_pair);
+  }
+  m_fileManager.SaveLocations(latLonvec);
 }
 
 void MainWidget::on_LoadActionTriggered() {
@@ -245,4 +254,13 @@ void MainWidget::on_LoadActionTriggered() {
                                                   QDir::currentPath(),
                                                   "JSON files (*.*);;(*.json)");
   // TODO: trigger file manager to load specified file
+  m_fileManager.LoadLocations(fileName);
+}
+
+void MainWidget::on_SendLatLonVector(
+    QVector<QPair<QString, QString>> latLonvec) {
+  for (auto it : latLonvec) {
+    emit markerModel->addMarkerAtCoordinate(
+        QGeoCoordinate(it.first.toDouble(), it.second.toDouble(), 0));
+  }
 }
