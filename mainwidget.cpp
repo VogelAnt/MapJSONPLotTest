@@ -251,8 +251,10 @@ void MainWidget::on_SaveActionTriggered() {
 void MainWidget::on_LoadActionTriggered() {
   // reset vector
   m_latlonVector.clear();
+
   // delete coordinatewidgets
   on_scenarioTypechanged();
+
   // delete markers
   emit markerModel->comboBoxSelectionChanged();
   // "/home/tony/Documents/MapJSONPlotTest/LocationFiles"
@@ -265,8 +267,16 @@ void MainWidget::on_LoadActionTriggered() {
 }
 
 void MainWidget::LoadMarkersIntoUI() {
-  // TODO: Add into QWidget
-  // TODO: Add Markers into
+  std::cout << "Adding Coordinate at " << m_latEdit->text().toDouble() << " : "
+            << m_lonEdit->text().toDouble() << std::endl;
+  qDebug() << m_latlonVector.size();
+  for (int i = 0; i < m_latlonVector.size(); ++i) {
+    qDebug() << m_latlonVector.at(i).first << m_latlonVector.at(i).second;
+    double lat = m_latlonVector.at(i).first.toDouble();
+    double lon = m_latlonVector.at(i).second.toDouble();
+    emit markerModel->addMarkerAtCoordinate(QGeoCoordinate(lat, lon, 0));
+    on_AddLatLonPairToUI(lat, lon);
+  }
 }
 
 void MainWidget::on_SendLatLonVector(

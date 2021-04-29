@@ -80,4 +80,5 @@ QVector<QPair<QString, QString>> FileManager::LoadLocations(QString fileName) {
   if (latLonvector.isEmpty()) {
     qDebug() << "Vector is empty !!!";
   }
+  return latLonvector;
 }
