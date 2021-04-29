@@ -43,8 +43,6 @@ else()
     coordinatewidget.cpp
     mapmarker.h
     mapmarker.cpp
-    #routewidget.h
-    #routewidget.cpp
     Resources.qrc
     filemanager.h
     filemanager.cpp

@@ -61,6 +61,7 @@ private:
   void ResetMarkerIndex();
   void SetupMenuBar();
   void LoadMarkersIntoUI();
+
   // Map Widget layout
   QHBoxLayout *m_hLayout = nullptr;
   QVBoxLayout *m_vLayout = nullptr;

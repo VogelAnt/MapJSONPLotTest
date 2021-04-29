@@ -249,14 +249,17 @@ void MainWidget::on_SaveActionTriggered() {
 }
 
 void MainWidget::on_LoadActionTriggered() {
-  // TODO: reset vector
-  // TODO: delete coordinatewidgets
-  // TODO: delete markers
+  // reset vector
+  m_latlonVector.clear();
+  // delete coordinatewidgets
+  on_scenarioTypechanged();
+  // delete markers
+  emit markerModel->comboBoxSelectionChanged();
   // "/home/tony/Documents/MapJSONPlotTest/LocationFiles"
   QString fileName = QFileDialog::getOpenFileName(this, "Open position file",
                                                   QDir::currentPath(),
                                                   "JSON files (*.*);;(*.json)");
-  // TODO: trigger file manager to load specified file
+  // trigger file manager to load specified file
   m_latlonVector = m_fileManager.LoadLocations(fileName);
   LoadMarkersIntoUI();
 }
