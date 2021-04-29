@@ -16,12 +16,9 @@ class FileManager : QObject {
   Q_OBJECT
 public:
   FileManager();
-  /**
-   * @brief SetupFileStructure
-   * Create the directories and basic for scenarios and users
-   */
   void SaveLocations(QVector<QPair<QString, QString>> latLonvec);
-  void LoadLocations(QString fileName);
+  QVector<QPair<QString, QString>> LoadLocations(QString fileName);
+
 signals:
   void SendLatLonVec(QVector<QPair<QString, QString>> latLonVec);
 

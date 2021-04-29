@@ -60,6 +60,7 @@ private:
   void SetupVerticalLayout();
   void ResetMarkerIndex();
   void SetupMenuBar();
+  void LoadMarkersIntoUI();
   // Map Widget layout
   QHBoxLayout *m_hLayout = nullptr;
   QVBoxLayout *m_vLayout = nullptr;
@@ -89,6 +90,7 @@ private:
   QAction *m_loadAction = nullptr;
   FileManager m_fileManager;
   int m_markerIndex = 1;
+  QVector<QPair<QString, QString>> m_latlonVector;
 
 private slots:
   // TODO: Add to Trajectory Editor

@@ -4,16 +4,8 @@ FileManager::FileManager() { InitialSetup(); }
 
 void FileManager::InitialSetup() {}
 
+// TODO: Add FileName from FileDialog
 void FileManager::SaveLocations(QVector<QPair<QString, QString>> latLonvec) {
-  QVector<QPair<QString, QString>> markerVector;
-  QPair<QString, QString> latlonPair1;
-  latlonPair1.first = "46";
-  latlonPair1.second = "47";
-  markerVector.append(latlonPair1);
-  QPair<QString, QString> latlonPair2;
-  latlonPair2.first = "44";
-  latlonPair2.second = "45";
-  markerVector.append(latlonPair2);
   QJsonObject root_obj;
   QJsonObject markers_obj;
   //  QJsonArray latlon_array;
@@ -39,7 +31,8 @@ void FileManager::SaveLocations(QVector<QPair<QString, QString>> latLonvec) {
   std::cout << "Saved file at " << fileName.toStdString() << std::endl;
 }
 
-void FileManager::LoadLocations(QString fileName) {
+QVector<QPair<QString, QString>> FileManager::LoadLocations(QString fileName) {
+  QVector<QPair<QString, QString>> latLonvector;
   QFile file_obj(fileName);
   if (!file_obj.open(QIODevice::ReadOnly)) {
     std::cout << "Failed to open file: " << fileName.toStdString() << std::endl;
@@ -62,16 +55,29 @@ void FileManager::LoadLocations(QString fileName) {
     std::cout << "json doc is not object." << std::endl;
     exit(3);
   }
+  // root obj needed
   QJsonObject root_obj = json_doc.object();
   QVariantMap root_map = root_obj.toVariantMap();
-  QVariantList latlonVariantlist = root_map["LatLonPair"].toList();
-  if (latlonVariantlist.isEmpty()) {
-    std::cout << "The inventory array is empty";
+
+  QVariantMap stats = root_map["LatLonPair"].toMap();
+
+  // rename inv to LatLonList
+  QVariantList lat_lon_list = root_map["LatLonPair"].toList();
+
+  if (lat_lon_list.isEmpty()) {
+    qDebug() << "The lat lon list is empty";
   }
-  // TODO: take this user list and use it as
-  for (int i = 0; i < latlonVariantlist.count(); ++i) {
-    QString userName = latlonVariantlist.at(i).toString();
-    std::cout << userName.toStdString() << std::endl;
-    //    userList.append(userName);
+  for (int i; i < lat_lon_list.count(); ++i) {
+    QVariantMap var_latlon_map = lat_lon_list.at(i).toMap();
+    for (auto it : var_latlon_map.keys()) {
+      QStringList latlon_values = var_latlon_map.value(it).toStringList();
+      QPair<QString, QString> latlonPair;
+      latlonPair.first = it;
+      latlonPair.second = var_latlon_map.value(it).toString();
+      latLonvector.push_back(latlonPair);
+    }
+  }
+  if (latLonvector.isEmpty()) {
+    qDebug() << "Vector is empty !!!";
   }
 }
