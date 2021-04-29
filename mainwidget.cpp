@@ -76,6 +76,7 @@ void MainWidget::SetupQuickLayout() {
                           << "Draw Scenario"
                           << "Custom Dynamic Scenario"
                           << "GeoCode Scenario";
+  m_scenarioCombobox->hide();
   m_scenarioCombobox->addItems(m_scenarioSelectionlist);
   markerModel = new MapMarker();
   qWidget = new QQuickWidget(this);
@@ -275,7 +276,7 @@ void MainWidget::LoadMarkersIntoUI() {
     double lat = m_latlonVector.at(i).first.toDouble();
     double lon = m_latlonVector.at(i).second.toDouble();
     emit markerModel->addMarkerAtCoordinate(QGeoCoordinate(lat, lon, 0));
-    on_AddLatLonPairToUI(lat, lon);
+    //    on_AddLatLonPairToUI(lat, lon);
   }
 }
 

@@ -75,7 +75,7 @@ signals:
   void addMarkerAtCoordinate(QGeoCoordinate coord_from_UI);
 
 private:
-  bool m_singleScenario = true;
+  bool m_singleScenario = false;
   bool m_drawScenario = false;
   QVector<QPair<double, double>> m_LatLonVector;
   QVector<gpxCoordinate> m_gpxcoordinatevector;
